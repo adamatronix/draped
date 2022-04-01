@@ -1,0 +1,36 @@
+{
+  "name": "ts-parcel-boilerplate",
+  "version": "1.1.0",
+  "main": "dist/index.js",
+  "targets": {
+    "example": {
+      "source": "src/index.html",
+      "publicUrl": "./",
+      "distDir": "serve"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "parcel src/index.html --dist-dir temp",
+    "build": "parcel build",
+    "clean": "rimraf dist",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "npm run clean && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
+    "gh-pages": "^3.2.3",
+    "parcel": "^2.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.3",
+    "typescript": "^4.4.4"
+  }
+}
