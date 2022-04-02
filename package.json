@@ -36,6 +36,7 @@
   "dependencies": {
     "@types/three": "^0.139.0",
     "ammojs-typed": "^1.0.6",
+    "gsap": "^3.10.2",
     "three": "^0.139.2"
   }
 }

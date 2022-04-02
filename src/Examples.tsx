@@ -13,7 +13,7 @@ const Example = () => {
 
   const StageRef = React.useCallback((node) => {
     if(node !== null) {
-      new DrapedStage(node);
+      new DrapedStage(node,{ stats: true });
     }
   },[])
   return (
