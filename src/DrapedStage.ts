@@ -147,7 +147,7 @@ class DrapedStage {
     clothGeometry.rotateY( Math.PI * 0.5);
     clothGeometry.translate( clothPos.x, clothPos.y + clothHeight * 0.5, clothPos.z - clothWidth * 0.5 );
 
-    const clothMaterial = new THREE.MeshPhongMaterial( { color: 0xFFFFFF, side: THREE.DoubleSide } );
+    const clothMaterial = new THREE.MeshPhongMaterial( { color: 0x0083c3, side: THREE.DoubleSide } );
     this.cloth = new THREE.Mesh( clothGeometry, clothMaterial );
     this.cloth.castShadow = true;
     //cloth.receiveShadow = true;
@@ -157,11 +157,11 @@ class DrapedStage {
     manager.onLoad = function () {
 
     }
-    let TextureLoader = new THREE.TextureLoader(manager);
+    /*let TextureLoader = new THREE.TextureLoader(manager);
     TextureLoader.load(TestImage, (texture) => {
       this.cloth.material.map = texture;
       this.cloth.material.needsUpdate = true;
-    });
+    });*/
 
     const margin = 0.01;
     // Cloth physic object
