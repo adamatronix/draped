@@ -2,8 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Ammo from 'ammojs-typed';
 import Stats from 'three/examples/jsm/libs/stats.module';
-import TestImage from './assets/100000x100000-999-4.png';
-
+import Neo from './assets/neo.mp4';
 
 interface Origin {
   x: number;
@@ -46,6 +45,7 @@ class DrapedStage {
   tmpPos: any;
   tmpQuat: any;
   tmpTrans: any;
+  video:HTMLVideoElement;
 
 
   constructor(el: HTMLDivElement, options?: LooseObject) {
@@ -59,6 +59,7 @@ class DrapedStage {
     this.clock = new THREE.Clock();
     this.tmpPos = new THREE.Vector3();
     this.tmpQuat = new THREE.Quaternion();
+    
   
 
     Ammo(Ammo).then(() => {
@@ -77,7 +78,10 @@ class DrapedStage {
     this.setupEvents();
     this.initGraphics();
     this.initPhysics();
-    this.createObjects();
+
+    this.video = this.createVideo(Neo);
+    this.video.addEventListener("loadedmetadata",this.createObjects);
+    this.createObjects = this.createObjects.bind(this);
   }
 
   setupEvents = () => {
@@ -147,20 +151,30 @@ class DrapedStage {
     clothGeometry.rotateY( Math.PI * 0.5);
     clothGeometry.translate( clothPos.x, clothPos.y + clothHeight * 0.5, clothPos.z - clothWidth * 0.5 );
 
-    const clothMaterial = new THREE.MeshPhongMaterial( { color: 0x0083c3, side: THREE.DoubleSide } );
+
+    let texture = new THREE.VideoTexture( this.video );
+    const clothMaterial = new THREE.MeshPhongMaterial( { map:texture, side: THREE.DoubleSide } );
     this.cloth = new THREE.Mesh( clothGeometry, clothMaterial );
+    this.cloth.rotation.y = - Math.PI * 0.5;
     this.cloth.castShadow = true;
     //cloth.receiveShadow = true;
     this.scene.add( this.cloth );
+    this.video.play();
 
     let manager = new THREE.LoadingManager();
     manager.onLoad = function () {
 
     }
-    /*let TextureLoader = new THREE.TextureLoader(manager);
-    TextureLoader.load(TestImage, (texture) => {
+
+    /*
+    let TextureLoader = new THREE.TextureLoader(manager);
+    TextureLoader.load(TestGif, (texture) => {
+      // @ts-ignore
       this.cloth.material.map = texture;
+      // @ts-ignore
       this.cloth.material.needsUpdate = true;
+      
+      
     });*/
 
     const margin = 0.01;
@@ -296,7 +310,7 @@ class DrapedStage {
     }
   }
 
-  createParalellepiped = ( sx, sy, sz, mass, pos, quat, material ) => {
+  createParalellepiped = ( sx:number, sy:number, sz:number, mass:number, pos:THREE.Vector3, quat:THREE.Quaternion, material:THREE.Material ) => {
     const margin = 0.05;
     const threeObject = new THREE.Mesh( new THREE.BoxGeometry( sx, sy, sz, 1, 1, 1 ), material );
     const shape = new Ammo.btBoxShape( new Ammo.btVector3( sx * 0.5, sy * 0.5, sz * 0.5 ) );
@@ -308,7 +322,7 @@ class DrapedStage {
 
   }
 
-  createRigidBody = ( threeObject, physicsShape, mass, pos, quat ) => {
+  createRigidBody = ( threeObject:THREE.Mesh, physicsShape:Ammo.btBoxShape, mass:number, pos:THREE.Vector3, quat:THREE.Quaternion ) => {
     const AmmoLib = window.Ammo;
     threeObject.position.copy( pos );
     threeObject.quaternion.copy( quat );
@@ -409,6 +423,18 @@ class DrapedStage {
     var distance = - this.camera.position.y / dir.y;
     return this.camera.position.clone().add( dir.multiplyScalar( distance ) );
   }
+
+  createVideo = (source:string) => {
+    var el = document.createElement("video");
+    el.style.display = "none";
+    el.crossOrigin = "anonymous";
+    el.muted = true;
+    el.loop = true;
+    el.preload = "auto";
+    el.src = source;
+    return el;
+  }
+
 
   destroyEvents = () => {
     document.body.removeEventListener("mousemove", this.onMouseMove);

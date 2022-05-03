@@ -1,14 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
-import styled from 'styled-components';
 import DrapedStage from './DrapedStage';
+import './index.scss';
 
-const Wrapper = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-
-`
 const Example = () => {
 
   const StageRef = React.useCallback((node) => {
@@ -17,7 +11,7 @@ const Example = () => {
     }
   },[])
   return (
-    <Wrapper ref={StageRef}></Wrapper>
+    <div style={{ width: '100%', height: '100vh'}} ref={StageRef}></div>
   )
   
 }
